@@ -192,3 +192,4 @@ const initialProducts = [
 ];
 
 module.exports = initialProducts;
+

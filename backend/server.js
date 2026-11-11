@@ -45,3 +45,4 @@ connectDB().then(async () => {
     console.log(`[API] Products API available at http://localhost:${PORT}/api/products`);
   });
 });
+

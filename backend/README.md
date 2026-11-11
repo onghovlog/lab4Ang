@@ -45,3 +45,4 @@ npm run backend
 | `POST` | `/api/products/seed` | Reset & nạp lại 10 sản phẩm mẫu ban đầu |
 
 > **Ghi chú**: Khi server khởi động lần đầu, nếu database rỗng, hệ thống sẽ tự động nạp (auto-seed) 10 sản phẩm hoa tươi ban đầu vào database.
+
