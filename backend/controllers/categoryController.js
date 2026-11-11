@@ -105,3 +105,4 @@ exports.seedCategories = async (req, res) => {
     res.status(500).json({ message: 'Lỗi khi seed danh mục', error: error.message });
   }
 };
+

@@ -58,3 +58,4 @@ const initialCategories = [
 ];
 
 module.exports = initialCategories;
+
