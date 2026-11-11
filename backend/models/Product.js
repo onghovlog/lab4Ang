@@ -7,6 +7,12 @@ const productSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+    },
     name: {
       type: String,
       required: true,
@@ -44,9 +50,10 @@ const productSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
-    category: {
-      type: String,
-      default: 'all',
+    categoryId: {
+      type: Number,
+      required: true,
+      index: true,
     },
     description: {
       type: String,
@@ -67,4 +74,3 @@ const productSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model('Product', productSchema);
-

@@ -1,6 +1,7 @@
 const initialProducts = [
   {
     id: 1,
+    slug: 'bo-hoa-hong-pastel-ngot-ngao',
     name: 'Bó Hoa Hồng Pastel Ngọt Ngào',
     price: '350.000đ',
     oldPrice: '420.000đ',
@@ -10,7 +11,7 @@ const initialProducts = [
     createdAt: '2026-11-01',
     badge: 'NEW',
     badgeClass: 'label-new',
-    category: 'love',
+    categoryId: 6, // Hoa tình yêu
     description: 'Bó hoa hồng pastel phối cùng hoa baby trắng tinh khôi, biểu trưng cho tình yêu thuần khiết và sự trân trọng. Phù hợp tặng sinh nhật, kỷ niệm hoặc chúc mừng.',
     features: [
       '🌸 Hoa tươi chọn lọc 100% trong ngày',
@@ -20,6 +21,7 @@ const initialProducts = [
   },
   {
     id: 2,
+    slug: 'bo-hoa-dong-noi',
     name: 'Bó Hoa Đồng Nội',
     price: '290.000đ',
     oldPrice: '-',
@@ -29,7 +31,7 @@ const initialProducts = [
     createdAt: '2026-11-02',
     badge: 'NEW',
     badgeClass: 'label-new',
-    category: 'birthday',
+    categoryId: 4, // Hoa sinh nhật
     description: 'Mang vẻ đẹp mộc mạc, bình dị nhưng đầy cuốn hút của những bông hoa dại khoe sắc, mang lại cảm giác bình yên và thư thái.',
     features: [
       '🌸 Hoa tươi chọn lọc 100% trong ngày',
@@ -39,6 +41,7 @@ const initialProducts = [
   },
   {
     id: 3,
+    slug: 'hoa-tinh-yeu-ngot-ngao',
     name: 'Hoa Tình Yêu Ngọt Ngào',
     price: '420.000đ',
     oldPrice: '-',
@@ -48,7 +51,7 @@ const initialProducts = [
     createdAt: '2026-11-03',
     badge: 'NEW',
     badgeClass: 'label-new',
-    category: 'love',
+    categoryId: 6, // Hoa tình yêu
     description: 'Sự kết hợp hoàn hảo giữa hoa hồng đỏ thắm và phụ kiện cao cấp, lời tỏ tình dịu dàng và chân thành nhất.',
     features: [
       '🌸 Hoa tươi chọn lọc 100% trong ngày',
@@ -58,6 +61,7 @@ const initialProducts = [
   },
   {
     id: 4,
+    slug: 'gio-hoa-thanh-xuan',
     name: 'Giỏ Hoa Thanh Xuân',
     price: '390.000đ',
     oldPrice: '-',
@@ -67,7 +71,7 @@ const initialProducts = [
     createdAt: '2026-11-04',
     badge: 'NEW',
     badgeClass: 'label-new',
-    category: 'birthday',
+    categoryId: 4, // Hoa sinh nhật
     description: 'Giỏ hoa tràn đầy năng lượng tươi trẻ, thích hợp tặng bạn bè, đồng nghiệp nhân dịp sinh nhật và các ngày lễ kỷ niệm.',
     features: [
       '🌸 Hoa tươi chọn lọc 100% trong ngày',
@@ -77,6 +81,7 @@ const initialProducts = [
   },
   {
     id: 5,
+    slug: 'bo-hong-do-nong-nan',
     name: 'Bó Hồng Đỏ Nồng Nàn',
     price: '320.000đ',
     oldPrice: '400.000đ',
@@ -86,7 +91,7 @@ const initialProducts = [
     createdAt: '2026-11-05',
     badge: '-20%',
     badgeClass: 'label-sale',
-    category: 'love',
+    categoryId: 6, // Hoa tình yêu
     description: 'Bó hoa hồng đỏ kiêu sa biểu tượng cho tình yêu vĩnh cửu và sự đam mê mãnh liệt, món quà ý nghĩa trong các dịp đặc biệt.',
     features: [
       '🌸 Hoa tươi chọn lọc 100% trong ngày',
@@ -96,6 +101,7 @@ const initialProducts = [
   },
   {
     id: 6,
+    slug: 'hoa-sac-mau-ruc-ro',
     name: 'Hoa Sắc Màu Rực Rỡ',
     price: '300.000đ',
     oldPrice: '400.000đ',
@@ -105,7 +111,7 @@ const initialProducts = [
     createdAt: '2026-11-06',
     badge: '-25%',
     badgeClass: 'label-sale',
-    category: 'congrats',
+    categoryId: 2, // Hoa chúc mừng
     description: 'Sự kết hợp đa sắc màu rực rỡ tươi mới đem lại niềm vui, sự lạc quan và may mắn ngập tràn cho không gian sống.',
     features: [
       '🌸 Hoa tươi chọn lọc 100% trong ngày',
@@ -115,6 +121,7 @@ const initialProducts = [
   },
   {
     id: 7,
+    slug: 'bo-hoa-diu-dang',
     name: 'Bó Hoa Dịu Dàng',
     price: '255.000đ',
     oldPrice: '300.000đ',
@@ -124,7 +131,7 @@ const initialProducts = [
     createdAt: '2026-11-07',
     badge: 'NEW',
     badgeClass: 'label-new',
-    category: 'birthday',
+    categoryId: 4, // Hoa sinh nhật
     description: 'Tone màu phấn nhẹ nhàng, thanh lịch, mang lại cảm giác bình yên, ấm áp và thư thái cho người nhận.',
     features: [
       '🌸 Hoa tươi chọn lọc 100% trong ngày',
@@ -134,6 +141,7 @@ const initialProducts = [
   },
   {
     id: 8,
+    slug: 'gio-hoa-ngot-ngao',
     name: 'Giỏ Hoa Ngọt Ngào',
     price: '350.000đ',
     oldPrice: '500.000đ',
@@ -143,7 +151,7 @@ const initialProducts = [
     createdAt: '2026-11-08',
     badge: '-30%',
     badgeClass: 'label-sale',
-    category: 'congrats',
+    categoryId: 2, // Hoa chúc mừng
     description: 'Giỏ hoa tông pastel kết hợp hoa hồng và baby, sang trọng và đầy cuốn hút, là điểm nhấn tuyệt vời cho mọi bữa tiệc.',
     features: [
       '🌸 Hoa tươi chọn lọc 100% trong ngày',
@@ -153,6 +161,7 @@ const initialProducts = [
   },
   {
     id: 9,
+    slug: 'hoa-chuc-mung-rang-ro',
     name: 'Hoa Chúc Mừng Rạng Rỡ',
     price: '450.000đ',
     oldPrice: '-',
@@ -162,7 +171,7 @@ const initialProducts = [
     createdAt: '2026-11-09',
     badge: 'NEW',
     badgeClass: 'label-new',
-    category: 'opening',
+    categoryId: 5, // Hoa khai trương
     description: 'Lẵng hoa chúc mừng khai trương và sự kiện tươi sáng, biểu trưng cho sự thịnh vượng, phát tài phát lộc.',
     features: [
       '🌸 Hoa tươi chọn lọc 100% trong ngày',
@@ -172,6 +181,7 @@ const initialProducts = [
   },
   {
     id: 10,
+    slug: 'bo-hoa-cuoi-hanh-phuc',
     name: 'Bó Hoa Cưới Hạnh Phúc',
     price: '540.000đ',
     oldPrice: '600.000đ',
@@ -181,7 +191,7 @@ const initialProducts = [
     createdAt: '2026-11-10',
     badge: '-10%',
     badgeClass: 'label-sale',
-    category: 'wedding',
+    categoryId: 3, // Hoa cưới
     description: 'Bó hoa cưới cầm tay cô dâu tinh tế, lãng mạn, tôn vinh khoảnh khắc hạnh phúc nhất trong ngày trọng đại.',
     features: [
       '🌸 Hoa tươi chọn lọc 100% trong ngày',
@@ -192,4 +202,3 @@ const initialProducts = [
 ];
 
 module.exports = initialProducts;
-

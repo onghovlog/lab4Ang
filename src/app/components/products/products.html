@@ -1,27 +1,31 @@
 <!-- BREADCRUMB -->
 <div class="breadcrumb">
-  <a routerLink="/">Trang chủ</a> &gt; <span>Sản phẩm</span>
+  <a routerLink="/">Trang chủ</a> &gt;
+  @if (selectedCategorySlug() !== 'tat-ca') {
+    <a routerLink="/products">Sản phẩm</a> &gt; <span>{{ currentCategoryTitle() }}</span>
+  } @else {
+    <span>Sản phẩm</span>
+  }
 </div>
 
 <!-- PAGE TITLE -->
 <section class="page-heading">
-  <h1>Khám phá hoa tươi 🌷</h1>
+  <h1>{{ currentCategoryTitle() }} 🌷</h1>
   <p>
-    Chọn những bó hoa xinh đẹp dành cho người bạn yêu thương.
+    Chọn những bó hoa tươi xinh đẹp, chất lượng nhất dành cho người bạn yêu thương.
   </p>
 </section>
 
-<!-- DANH MUC SCROLL NGANG -->
+<!-- DANH MUC SCROLL NGANG (Chuyển trang theo Slug) -->
 <section class="category-section">
   <h2 class="category-title">Danh mục hoa</h2>
 
   <div class="category-scroll">
-    @for (cat of categories; track cat.id) {
-    <a href="javascript:void(0)"
-       (click)="onSelectCategory(cat.id)"
+    @for (cat of categories(); track cat.id) {
+    <a [routerLink]="cat.slug === 'tat-ca' ? '/products' : ['/category', cat.slug]"
        class="category-item"
-       [class.active]="selectedCategory() === cat.id">
-      {{ cat.name }}
+       [class.active]="selectedCategorySlug() === cat.slug">
+      {{ cat.icon }} {{ cat.name }}
     </a>
     }
   </div>
@@ -85,7 +89,7 @@
           </div>
           <div class="product-actions">
             <a routerLink="/cart" class="btn-buy">🛒 Mua</a>
-            <a [routerLink]="['/product', product.id]" class="btn-detail">Chi tiết</a>
+            <a [routerLink]="['/product', product.slug || product.id]" class="btn-detail">Chi tiết</a>
           </div>
         </div>
       </article>

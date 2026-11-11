@@ -31,18 +31,26 @@ npm run backend
 
 ## Danh sách API Endpoints
 
+### 1. Categories API (`/api/categories`)
+| Phương thức | Endpoint | Mô tả |
+|---|---|---|
+| `GET` | `/api/categories` | Lấy danh sách danh mục (đã sắp xếp tăng dần theo trường `order`) |
+| `GET` | `/api/categories/:slugOrId` | Lấy chi tiết danh mục theo `slug` hoặc `id` |
+| `POST` | `/api/categories` | Thêm mới danh mục |
+| `PUT` | `/api/categories/:id` | Cập nhật danh mục |
+| `DELETE` | `/api/categories/:id` | Xoá danh mục |
+| `POST` | `/api/categories/seed` | Reset & nạp lại 7 danh mục mẫu ban đầu |
+
+### 2. Products API (`/api/products`)
 | Phương thức | Endpoint | Mô tả |
 |---|---|---|
 | `GET` | `/api/health` | Kiểm tra trạng thái server |
-| `GET` | `/api/products` | Lấy danh sách sản phẩm (hỗ trợ `?category=`, `?sort=`, `?search=`, `?limit=`) |
+| `GET` | `/api/products` | Lấy danh sách sản phẩm (hỗ trợ `?categorySlug=`, `?categoryId=`, `?sort=`, `?search=`, `?limit=`) |
 | `GET` | `/api/products/new` | Lấy danh sách sản phẩm mới nhất (`?limit=4`) |
 | `GET` | `/api/products/sale` | Lấy danh sách sản phẩm đang giảm giá (`?limit=4`) |
 | `GET` | `/api/products/bestseller` | Lấy danh sách sản phẩm bán chạy nhất (`?limit=4`) |
-| `GET` | `/api/products/:id` | Lấy chi tiết sản phẩm theo ID (hỗ trợ số ID hoặc ObjectId) |
+| `GET` | `/api/products/:idOrSlug` | Lấy chi tiết sản phẩm theo `id` hoặc `slug` |
 | `POST` | `/api/products` | Thêm mới một sản phẩm |
 | `PUT` | `/api/products/:id` | Cập nhật thông tin sản phẩm |
 | `DELETE` | `/api/products/:id` | Xoá sản phẩm |
 | `POST` | `/api/products/seed` | Reset & nạp lại 10 sản phẩm mẫu ban đầu |
-
-> **Ghi chú**: Khi server khởi động lần đầu, nếu database rỗng, hệ thống sẽ tự động nạp (auto-seed) 10 sản phẩm hoa tươi ban đầu vào database.
-

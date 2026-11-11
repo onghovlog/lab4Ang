@@ -1,24 +1,45 @@
 const Product = require('../models/Product');
+const Category = require('../models/Category');
 const initialProducts = require('../data/initialProducts');
 
-// @desc    Get all products (with optional filtering, sorting, limit)
+// @desc    Get all products (with filtering by categoryId/categorySlug, sorting, search, limit)
 // @route   GET /api/products
 exports.getProducts = async (req, res) => {
   try {
-    const { category, sort, search, limit } = req.query;
+    const { categoryId, categorySlug, category, sort, search, limit } = req.query;
     let query = {};
 
-    if (category && category !== 'all') {
-      query.category = category;
+    // 1. Filter by categorySlug
+    if (categorySlug && categorySlug !== 'tat-ca' && categorySlug !== 'all') {
+      const cat = await Category.findOne({ slug: categorySlug });
+      if (cat) {
+        query.categoryId = cat.id;
+      } else {
+        // If slug doesn't exist, return empty array
+        return res.json([]);
+      }
+    } else if (categoryId && categoryId !== 'all') {
+      query.categoryId = Number(categoryId);
+    } else if (category && category !== 'all' && category !== 'tat-ca') {
+      // Backward compatibility with previous category parameter
+      if (!isNaN(category)) {
+        query.categoryId = Number(category);
+      } else {
+        const cat = await Category.findOne({ slug: category });
+        if (cat) {
+          query.categoryId = cat.id;
+        }
+      }
     }
 
+    // 2. Filter by search keyword
     if (search) {
       query.name = { $regex: search, $options: 'i' };
     }
 
     let productsQuery = Product.find(query);
 
-    // Sorting
+    // 3. Sorting
     if (sort === 'bestseller') {
       productsQuery = productsQuery.sort({ sold: -1 });
     } else if (sort === 'promotion') {
@@ -28,7 +49,7 @@ exports.getProducts = async (req, res) => {
     } else if (sort === 'price-desc') {
       productsQuery = productsQuery.sort({ price: -1 });
     } else {
-      // Default: newest first (by id descending or createdAt descending)
+      // Default: newest first
       productsQuery = productsQuery.sort({ id: -1 });
     }
 
@@ -81,18 +102,26 @@ exports.getBestSellingProducts = async (req, res) => {
   }
 };
 
-// @desc    Get single product by ID (numeric id or Mongo _id)
-// @route   GET /api/products/:id
+// @desc    Get single product by ID or Slug
+// @route   GET /api/products/:idOrSlug
 exports.getProductById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id: idOrSlug } = req.params;
     let product;
 
-    // Check if id is a number
-    if (!isNaN(id)) {
-      product = await Product.findOne({ id: Number(id) });
-    } else {
-      product = await Product.findById(id);
+    // 1. Try finding by numeric id
+    if (!isNaN(idOrSlug)) {
+      product = await Product.findOne({ id: Number(idOrSlug) });
+    }
+
+    // 2. Try finding by slug
+    if (!product) {
+      product = await Product.findOne({ slug: idOrSlug });
+    }
+
+    // 3. Try finding by MongoDB ObjectId
+    if (!product && idOrSlug.match(/^[0-9a-fA-F]{24}$/)) {
+      product = await Product.findById(idOrSlug);
     }
 
     if (!product) {
@@ -109,10 +138,20 @@ exports.getProductById = async (req, res) => {
 // @route   POST /api/products
 exports.createProduct = async (req, res) => {
   try {
-    // If id is not provided, generate next max id
     if (!req.body.id) {
       const maxProduct = await Product.findOne().sort({ id: -1 });
       req.body.id = maxProduct ? maxProduct.id + 1 : 1;
+    }
+
+    if (!req.body.slug && req.body.name) {
+      req.body.slug = req.body.name
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[đĐ]/g, 'd')
+        .replace(/([^0-9a-z-\s])/g, '')
+        .replace(/(\s+)/g, '-')
+        .replace(/-+/g, '-');
     }
 
     const product = new Product(req.body);
@@ -128,7 +167,7 @@ exports.createProduct = async (req, res) => {
 exports.updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const query = !isNaN(id) ? { id: Number(id) } : { _id: id };
+    const query = !isNaN(id) ? { id: Number(id) } : { slug: id };
     const updated = await Product.findOneAndUpdate(query, req.body, { new: true });
 
     if (!updated) {
@@ -159,7 +198,7 @@ exports.deleteProduct = async (req, res) => {
   }
 };
 
-// @desc    Seed initial data
+// @desc    Seed initial products
 // @route   POST /api/products/seed
 exports.seedProducts = async (req, res) => {
   try {
@@ -170,4 +209,3 @@ exports.seedProducts = async (req, res) => {
     res.status(500).json({ message: 'Lỗi khi seed dữ liệu', error: error.message });
   }
 };
-

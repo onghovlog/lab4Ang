@@ -10,10 +10,20 @@ export class ProductService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:5000/api/products';
 
-  getProducts(params?: { category?: string; sort?: string; search?: string; limit?: number }): Observable<Product[]> {
+  getProducts(params?: {
+    categorySlug?: string;
+    categoryId?: number;
+    sort?: string;
+    search?: string;
+    limit?: number;
+  }): Observable<Product[]> {
     let httpParams = new HttpParams();
-    if (params?.category) {
-      httpParams = httpParams.set('category', params.category);
+
+    if (params?.categorySlug) {
+      httpParams = httpParams.set('categorySlug', params.categorySlug);
+    }
+    if (params?.categoryId) {
+      httpParams = httpParams.set('categoryId', params.categoryId.toString());
     }
     if (params?.sort) {
       httpParams = httpParams.set('sort', params.sort);
@@ -24,6 +34,7 @@ export class ProductService {
     if (params?.limit) {
       httpParams = httpParams.set('limit', params.limit.toString());
     }
+
     return this.http.get<Product[]>(this.apiUrl, { params: httpParams });
   }
 
@@ -39,8 +50,8 @@ export class ProductService {
     return this.http.get<Product[]>(`${this.apiUrl}/bestseller?limit=${limit}`);
   }
 
-  getProductById(id: number | string): Observable<Product> {
-    return this.http.get<Product>(`${this.apiUrl}/${id}`);
+  // Hỗ trợ tìm kiếm theo ID hoặc Slug
+  getProductById(idOrSlug: number | string): Observable<Product> {
+    return this.http.get<Product>(`${this.apiUrl}/${idOrSlug}`);
   }
 }
-

@@ -1,6 +1,7 @@
 export interface Product {
   _id?: string;
   id: number;
+  slug: string;
   name: string;
   price: string;
   oldPrice: string;
@@ -12,7 +13,7 @@ export interface Product {
 
   badge?: string;
   badgeClass?: string;
-  category?: string;
+  categoryId: number; // Thay đổi category thành categoryId
   description?: string;
   features?: string[];
 }
