@@ -4,6 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "backend": "npm start --prefix backend",
+    "backend:dev": "npm run dev --prefix backend",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"

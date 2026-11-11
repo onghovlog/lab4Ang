@@ -16,32 +16,14 @@
   <h2 class="category-title">Danh mục hoa</h2>
 
   <div class="category-scroll">
-    <a routerLink="/products"
-       class="category-item active">🌸 Tất cả</a>
-
-    <a href="javascript:void(0)" class="category-item">
-      🎉 Hoa chúc mừng
+    @for (cat of categories; track cat.id) {
+    <a href="javascript:void(0)"
+       (click)="onSelectCategory(cat.id)"
+       class="category-item"
+       [class.active]="selectedCategory() === cat.id">
+      {{ cat.name }}
     </a>
-
-    <a href="javascript:void(0)" class="category-item">
-      💍 Hoa cưới
-    </a>
-
-    <a href="javascript:void(0)" class="category-item">
-      🎂 Hoa sinh nhật
-    </a>
-
-    <a href="javascript:void(0)" class="category-item">
-      🏢 Hoa khai trương
-    </a>
-
-    <a href="javascript:void(0)" class="category-item">
-      ❤️ Hoa tình yêu
-    </a>
-
-    <a href="javascript:void(0)" class="category-item">
-      🕊️ Hoa chia buồn
-    </a>
+    }
   </div>
 </section>
 
@@ -51,17 +33,17 @@
 
   <div class="filter-options">
     <div class="filter-option">
-      <input type="radio" id="newest" name="sort" checked>
+      <input type="radio" id="newest" name="sort" [checked]="selectedSort() === 'newest'" (change)="onSelectSort('newest')">
       <label for="newest">✨ Mới nhất</label>
     </div>
 
     <div class="filter-option">
-      <input type="radio" id="bestseller" name="sort">
+      <input type="radio" id="bestseller" name="sort" [checked]="selectedSort() === 'bestseller'" (change)="onSelectSort('bestseller')">
       <label for="bestseller">🔥 Bán chạy</label>
     </div>
 
     <div class="filter-option">
-      <input type="radio" id="promotion" name="sort">
+      <input type="radio" id="promotion" name="sort" [checked]="selectedSort() === 'promotion'" (change)="onSelectSort('promotion')">
       <label for="promotion">🏷️ Giảm giá</label>
     </div>
   </div>
@@ -71,210 +53,50 @@
 <section class="products-section">
 
   <div class="products-heading">
-    <h2>Hoa tươi mới nhất</h2>
+    <h2>Danh sách hoa tươi</h2>
     <span class="product-count">
-      Hiển thị 1–10 / 40
+      Hiển thị {{ products().length }} sản phẩm
     </span>
   </div>
 
-  <div class="product-grid">
-
-    <!-- PRODUCT 1 -->
-    <article class="product-card">
-      <div class="product-image">
-        <img src="https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=500&auto=format&fit=crop"
-             alt="Bó hoa hồng pastel">
-        <span class="label label-new">NEW</span>
-      </div>
-      <div class="product-info">
-        <h3 class="product-name">Bó Hoa Hồng Pastel</h3>
-        <div class="price">350.000đ</div>
-        <div class="old-price">&nbsp;</div>
-        <div class="product-actions">
-          <a routerLink="/cart" class="btn-buy">🛒 Mua</a>
-          <a routerLink="/product/1" class="btn-detail">Chi tiết</a>
+  @if (isLoading()) {
+    <p style="text-align: center; padding: 30px; color: #888;">Đang tải danh sách hoa...</p>
+  } @else {
+    <div class="product-grid">
+      @for (product of products(); track product.id) {
+      <article class="product-card">
+        <div class="product-image">
+          <img [src]="product.image" [alt]="product.name">
+          @if (product.discount > 0) {
+            <span class="label label-sale">-{{ product.discount }}%</span>
+          } @else if (product.badge) {
+            <span class="label {{ product.badgeClass || 'label-new' }}">{{ product.badge }}</span>
+          }
         </div>
-      </div>
-    </article>
-
-    <!-- PRODUCT 2 -->
-    <article class="product-card">
-      <div class="product-image">
-        <img src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=500&auto=format&fit=crop"
-             alt="Bó hoa đồng nội">
-        <span class="label label-new">NEW</span>
-      </div>
-      <div class="product-info">
-        <h3 class="product-name">Bó Hoa Đồng Nội</h3>
-        <div class="price">290.000đ</div>
-        <div class="old-price">&nbsp;</div>
-        <div class="product-actions">
-          <a routerLink="/cart" class="btn-buy">🛒 Mua</a>
-          <a routerLink="/product/2" class="btn-detail">Chi tiết</a>
+        <div class="product-info">
+          <h3 class="product-name">{{ product.name }}</h3>
+          <div class="price">{{ product.price }}</div>
+          <div class="old-price">
+            @if (product.discount > 0 && product.oldPrice && product.oldPrice !== '-') {
+              {{ product.oldPrice }}
+            } @else {
+              &nbsp;
+            }
+          </div>
+          <div class="product-actions">
+            <a routerLink="/cart" class="btn-buy">🛒 Mua</a>
+            <a [routerLink]="['/product', product.id]" class="btn-detail">Chi tiết</a>
+          </div>
         </div>
-      </div>
-    </article>
-
-    <!-- PRODUCT 3 -->
-    <article class="product-card">
-      <div class="product-image">
-        <img src="https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=500&auto=format&fit=crop"
-             alt="Hoa tình yêu">
-        <span class="label label-new">NEW</span>
-      </div>
-      <div class="product-info">
-        <h3 class="product-name">Hoa Tình Yêu Ngọt Ngào</h3>
-        <div class="price">420.000đ</div>
-        <div class="old-price">&nbsp;</div>
-        <div class="product-actions">
-          <a routerLink="/cart" class="btn-buy">🛒 Mua</a>
-          <a routerLink="/product/3" class="btn-detail">Chi tiết</a>
-        </div>
-      </div>
-    </article>
-
-    <!-- PRODUCT 4 -->
-    <article class="product-card">
-      <div class="product-image">
-        <img src="https://images.unsplash.com/photo-1457089328109-e5d9bd499191?w=500&auto=format&fit=crop"
-             alt="Giỏ hoa thanh xuân">
-        <span class="label label-new">NEW</span>
-      </div>
-      <div class="product-info">
-        <h3 class="product-name">Giỏ Hoa Thanh Xuân</h3>
-        <div class="price">390.000đ</div>
-        <div class="old-price">&nbsp;</div>
-        <div class="product-actions">
-          <a routerLink="/cart" class="btn-buy">🛒 Mua</a>
-          <a routerLink="/product/4" class="btn-detail">Chi tiết</a>
-        </div>
-      </div>
-    </article>
-
-    <!-- PRODUCT 5 -->
-    <article class="product-card">
-      <div class="product-image">
-        <img src="https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?w=500&auto=format&fit=crop"
-             alt="Hoa hồng đỏ">
-        <span class="label label-sale">-20%</span>
-      </div>
-      <div class="product-info">
-        <h3 class="product-name">Bó Hồng Đỏ Nồng Nàn</h3>
-        <div class="price">320.000đ</div>
-        <div class="old-price">400.000đ</div>
-        <div class="product-actions">
-          <a routerLink="/cart" class="btn-buy">🛒 Mua</a>
-          <a routerLink="/product/5" class="btn-detail">Chi tiết</a>
-        </div>
-      </div>
-    </article>
-
-    <!-- PRODUCT 6 -->
-    <article class="product-card">
-      <div class="product-image">
-        <img src="https://images.unsplash.com/photo-1468327768560-75b778cbb551?w=500&auto=format&fit=crop"
-             alt="Hoa sắc màu">
-        <span class="label label-sale">-25%</span>
-      </div>
-      <div class="product-info">
-        <h3 class="product-name">Hoa Sắc Màu Rực Rỡ</h3>
-        <div class="price">300.000đ</div>
-        <div class="old-price">400.000đ</div>
-        <div class="product-actions">
-          <a routerLink="/cart" class="btn-buy">🛒 Mua</a>
-          <a routerLink="/product/6" class="btn-detail">Chi tiết</a>
-        </div>
-      </div>
-    </article>
-
-    <!-- PRODUCT 7 -->
-    <article class="product-card">
-      <div class="product-image">
-        <img src="https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=500&auto=format&fit=crop"
-             alt="Hoa dịu dàng">
-        <span class="label label-new">NEW</span>
-      </div>
-      <div class="product-info">
-        <h3 class="product-name">Bó Hoa Dịu Dàng</h3>
-        <div class="price">255.000đ</div>
-        <div class="old-price">&nbsp;</div>
-        <div class="product-actions">
-          <a routerLink="/cart" class="btn-buy">🛒 Mua</a>
-          <a routerLink="/product/7" class="btn-detail">Chi tiết</a>
-        </div>
-      </div>
-    </article>
-
-    <!-- PRODUCT 8 -->
-    <article class="product-card">
-      <div class="product-image">
-        <img src="https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=500&auto=format&fit=crop"
-             alt="Giỏ hoa ngọt ngào">
-        <span class="label label-sale">-30%</span>
-      </div>
-      <div class="product-info">
-        <h3 class="product-name">Giỏ Hoa Ngọt Ngào</h3>
-        <div class="price">350.000đ</div>
-        <div class="old-price">500.000đ</div>
-        <div class="product-actions">
-          <a routerLink="/cart" class="btn-buy">🛒 Mua</a>
-          <a routerLink="/product/8" class="btn-detail">Chi tiết</a>
-        </div>
-      </div>
-    </article>
-
-    <!-- PRODUCT 9 -->
-    <article class="product-card">
-      <div class="product-image">
-        <img src="https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=500&auto=format&fit=crop"
-             alt="Hoa chúc mừng">
-        <span class="label label-new">NEW</span>
-      </div>
-      <div class="product-info">
-        <h3 class="product-name">Hoa Chúc Mừng Rạng Rỡ</h3>
-        <div class="price">450.000đ</div>
-        <div class="old-price">&nbsp;</div>
-        <div class="product-actions">
-          <a routerLink="/cart" class="btn-buy">🛒 Mua</a>
-          <a routerLink="/product/9" class="btn-detail">Chi tiết</a>
-        </div>
-      </div>
-    </article>
-
-    <!-- PRODUCT 10 -->
-    <article class="product-card">
-      <div class="product-image">
-        <img src="https://images.unsplash.com/photo-1562690868-60bbe7293e94?w=500&auto=format&fit=crop"
-             alt="Hoa cưới">
-        <span class="label label-sale">-10%</span>
-      </div>
-      <div class="product-info">
-        <h3 class="product-name">Bó Hoa Cưới Hạnh Phúc</h3>
-        <div class="price">540.000đ</div>
-        <div class="old-price">600.000đ</div>
-        <div class="product-actions">
-          <a routerLink="/cart" class="btn-buy">🛒 Mua</a>
-          <a routerLink="/product/10" class="btn-detail">Chi tiết</a>
-        </div>
-      </div>
-    </article>
-
-  </div>
+      </article>
+      } @empty {
+        <p style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #777;">
+          Không có sản phẩm nào thuộc danh mục này.
+        </p>
+      }
+    </div>
+  }
 </section>
-
-<!-- PHAN TRANG -->
-<nav class="pagination" aria-label="Phân trang">
-  <a href="javascript:void(0)" class="disabled" aria-label="Trang trước">‹</a>
-  <a routerLink="/products" class="active" aria-current="page">1</a>
-  <a href="javascript:void(0)">2</a>
-  <a href="javascript:void(0)">3</a>
-  <a href="javascript:void(0)">4</a>
-  <a href="javascript:void(0)" aria-label="Trang sau">›</a>
-</nav>
-
-<div class="pagination-info">
-  Trang 1 / 4
-</div>
 
 <!-- BANNER -->
 <aside class="promo-banner">

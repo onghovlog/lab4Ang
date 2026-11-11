@@ -3,41 +3,67 @@
   <a routerLink="/">Trang chủ</a> &gt; <a routerLink="/products">Sản phẩm</a> &gt; <span>Chi tiết</span>
 </div>
 
-<article class="product-detail">
-  <!-- IMAGE -->
-  <div class="detail-image">
-    <img src="https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=800&auto=format&fit=crop"
-         alt="Bó hoa hồng Pastel">
-    <span class="label label-new">NEW</span>
+@if (isLoading()) {
+  <div style="text-align: center; padding: 60px; color: #888;">
+    Đang tải thông tin sản phẩm...
   </div>
-
-  <!-- CONTENT -->
-  <div class="detail-info">
-    <h1 class="detail-title">Bó Hoa Hồng Pastel Ngọt Ngào</h1>
-    
-    <div class="detail-price-box">
-      <span class="price">350.000đ</span>
-      <span class="old-price">420.000đ</span>
-      <span class="discount-badge">-16%</span>
-    </div>
-
-    <p class="detail-desc">
-      Bó hoa hồng pastel phối cùng hoa baby trắng tinh khôi, biểu trưng cho tình yêu thuần khiết và sự trân trọng. Phù hợp tặng sinh nhật, kỷ niệm hoặc chúc mừng.
-    </p>
-
-    <div class="detail-features">
-      <div class="item">🌸 Hoa tươi chọn lọc 100% trong ngày</div>
-      <div class="item">💌 Tặng kèm thiệp chúc mừng & banner</div>
-      <div class="item">🚚 Giao nhanh trong 60 phút nội thành</div>
-    </div>
-
-    <div class="detail-actions">
-      <a routerLink="/cart" class="btn-cart">🛒 Thêm vào giỏ</a>
-      <a routerLink="/cart" class="btn-buy-now">Mua ngay</a>
-    </div>
-
-    <div class="back-link">
-      <a routerLink="/products">← Xem thêm hoa khác</a>
-    </div>
+} @else if (notFound() || !product()) {
+  <div style="text-align: center; padding: 60px;">
+    <h2>Không tìm thấy sản phẩm!</h2>
+    <p style="color: #666; margin-top: 10px;">Sản phẩm không tồn tại hoặc đã bị xoá.</p>
+    <a routerLink="/products" style="display: inline-block; margin-top: 15px; color: var(--orange-dark); font-weight: bold;">
+      ← Quay lại danh sách hoa
+    </a>
   </div>
-</article>
+} @else {
+  @let item = product()!;
+  <article class="product-detail">
+    <!-- IMAGE -->
+    <div class="detail-image">
+      <img [src]="item.image" [alt]="item.name">
+      @if (item.discount > 0) {
+        <span class="label label-sale">-{{ item.discount }}%</span>
+      } @else if (item.badge) {
+        <span class="label {{ item.badgeClass || 'label-new' }}">{{ item.badge }}</span>
+      }
+    </div>
+
+    <!-- CONTENT -->
+    <div class="detail-info">
+      <h1 class="detail-title">{{ item.name }}</h1>
+      
+      <div class="detail-price-box">
+        <span class="price">{{ item.price }}</span>
+        @if (item.discount > 0 && item.oldPrice && item.oldPrice !== '-') {
+          <span class="old-price">{{ item.oldPrice }}</span>
+          <span class="discount-badge">-{{ item.discount }}%</span>
+        }
+      </div>
+
+      <p class="detail-desc">
+        {{ item.description || 'Bó hoa tươi nghệ thuật phối cùng các loài hoa phụ cao cấp, thích hợp tặng người thân, bạn bè nhân dịp đặc biệt.' }}
+      </p>
+
+      <div class="detail-features">
+        @if (item.features && item.features.length > 0) {
+          @for (feature of item.features; track feature) {
+            <div class="item">{{ feature }}</div>
+          }
+        } @else {
+          <div class="item">🌸 Hoa tươi chọn lọc 100% trong ngày</div>
+          <div class="item">💌 Tặng kèm thiệp chúc mừng & banner</div>
+          <div class="item">🚚 Giao nhanh trong 60 phút nội thành</div>
+        }
+      </div>
+
+      <div class="detail-actions">
+        <a routerLink="/cart" class="btn-cart">🛒 Thêm vào giỏ</a>
+        <a routerLink="/cart" class="btn-buy-now">Mua ngay</a>
+      </div>
+
+      <div class="back-link">
+        <a routerLink="/products">← Xem thêm hoa khác</a>
+      </div>
+    </div>
+  </article>
+}

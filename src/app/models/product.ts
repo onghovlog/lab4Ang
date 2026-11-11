@@ -1,4 +1,5 @@
 export interface Product {
+  _id?: string;
   id: number;
   name: string;
   price: string;
@@ -11,4 +12,7 @@ export interface Product {
 
   badge?: string;
   badgeClass?: string;
+  category?: string;
+  description?: string;
+  features?: string[];
 }
