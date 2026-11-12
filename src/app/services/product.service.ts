@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product } from '../models/product';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:5000/api/products';
+  private apiUrl = `${environment.apiUrl}/products`;
 
   getProducts(params?: {
     categorySlug?: string;
